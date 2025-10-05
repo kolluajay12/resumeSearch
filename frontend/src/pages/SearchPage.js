@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
@@ -10,7 +10,8 @@ const SearchPage = () => {
     const [loading, setLoading] = useState(false);
     const [pagination, setPagination] = useState({ limit: 5, offset: 0, total: 0 });
 
-    const fetchResumes = async (currentOffset) => {
+    
+    const fetchResumes = useCallback(async (currentOffset) => {
         setLoading(true);
         try {
             const response = await axios.get('/api/resumes', {
@@ -27,11 +28,10 @@ const SearchPage = () => {
         } finally {
             setLoading(false);
         }
-    };
-
+    },[]);
     useEffect(() => {
         fetchResumes(0); 
-    }, [simpleQuery]);
+    }, []);
 
     const handleRagSearch = async (e) => {
         e.preventDefault();
